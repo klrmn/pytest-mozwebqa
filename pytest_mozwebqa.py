@@ -62,10 +62,11 @@ def pytest_runtest_setup(item):
     # history matches the regular expression
     sensitive = False
     if TestSetup.base_url:
-        r = requests.get(TestSetup.base_url)
-        urls = [h.url for h in r.history] + [r.url]
-        matches = [re.search(item.config.option.sensitive_url, u) for u in urls]
-        sensitive = any(matches)
+        if urlparse(TestSetup.base_url).scheme in ('http', 'https'):
+            r = requests.get(TestSetup.base_url)
+            urls = [h.url for h in r.history] + [r.url]
+            matches = [re.search(item.config.option.sensitive_url, u) for u in urls]
+            sensitive = any(matches)
 
     destructive = 'nondestructive' not in item.keywords
 

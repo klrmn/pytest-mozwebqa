@@ -15,6 +15,7 @@ from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium import selenium
 from selenium import webdriver
 import yaml
+from urlparse import urlparse
 
 
 __version__ = '0.9'
@@ -29,8 +30,9 @@ def pytest_configure(config):
             'accidentally.')
 
         if config.option.base_url:
-            r = requests.get(config.option.base_url)
-            assert r.status_code == 200, 'Base URL did not return status code 200. (URL: %s, Response: %s)' % (config.option.base_url, r.status_code)
+            if urlparse(config.option.base_url).scheme in ('http', 'https'):
+                r = requests.get(config.option.base_url)
+                assert r.status_code == 200, 'Base URL did not return status code 200. (URL: %s, Response: %s)' % (config.option.base_url, r.status_code)
 
         if config.option.webqa_report_path:
             from html_report import HTMLReport
@@ -40,7 +42,7 @@ def pytest_configure(config):
         if not config.option.run_destructive:
             if config.option.markexpr:
                 config.option.markexpr = 'nondestructive and (%s)' % config.option.markexpr
-            else: 
+            else:
                 config.option.markexpr = 'nondestructive'
 
 

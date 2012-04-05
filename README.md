@@ -200,7 +200,7 @@ By default log files are not captured as these may contain confidential data suc
 ### Example
 
     import pytest
-    
+
     @pytest.mark.public
     def test_public(self, mozwebqa):
         home_pg = home_page.HomePage(mozwebqa)
@@ -210,7 +210,20 @@ You can also explicitly mark the test as private, which sets the test appopriate
 ### Example
 
     import pytest
-    
+
     @pytest.mark.private
     def test_private(self, mozwebqa):
         home_pg = home_page.HomePage(mozwebqa)
+
+Testing Patches for pytest-mozwebqa
+___________________________________
+uninstall previous version
+    pip uninstall pytest-mozwebqa
+do the build
+    python setup.py install
+test that your change works
+test that one or more mozilla webqa test projects still runs
+commit and submit pull request
+to revert
+    pip uninstall pytest-mozwebqa
+    pip install pytest-mozwebqa
